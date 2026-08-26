@@ -1,0 +1,62 @@
+machine:
+  name: "BORE-01"
+  description: "Simulated CNC boring station, single spindle"
+  sample_rate_hz: 10.0
+  subgroup_size: 5
+  random_seed: 42
+
+tags:
+  - name: BoreDiameter
+    units: mm
+    nominal: 20.000
+    std_dev: 0.012
+    lsl: 19.950
+    usl: 20.050
+    decimals: 4
+    description: "Finished bore diameter measured in-process"
+
+  - name: Torque
+    units: Nm
+    nominal: 45.0
+    std_dev: 1.5
+    lsl: 35.0
+    usl: 55.0
+    decimals: 2
+    description: "Spindle torque during the cut"
+
+  - name: CycleTime
+    units: s
+    nominal: 12.0
+    std_dev: 0.25
+    lsl: null
+    usl: 14.0
+    decimals: 3
+    description: "Time to complete one part"
+
+  - name: Temperature
+    units: degC
+    nominal: 42.0
+    std_dev: 1.2
+    lsl: null
+    usl: 60.0
+    decimals: 2
+    description: "Spindle bearing temperature"
+
+  - name: Vibration
+    units: mm/s
+    nominal: 2.5
+    std_dev: 0.35
+    lsl: null
+    usl: 4.5
+    decimals: 3
+    description: "Spindle vibration, root mean square velocity"
+
+  - name: ScrapCount
+    units: parts
+    nominal: 0.0
+    std_dev: 0.0
+    lsl: null
+    usl: null
+    decimals: 0
+    is_counter: true
+    description: "Running count of parts rejected this shift"
