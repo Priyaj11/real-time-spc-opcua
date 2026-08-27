@@ -16,6 +16,8 @@ include = ["spc_opcua*"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-v --strict-markers"
+asyncio_mode = "strict"
+asyncio_default_fixture_loop_scope = "function"
 markers = [
     "integration: tests that start a real OPC UA server or client",
 ]
