@@ -1,1 +1,1 @@
-"""Placeholder package, filled in during a later milestone."""
+"""The operator screen: a live human machine interface over the SPC engine."""

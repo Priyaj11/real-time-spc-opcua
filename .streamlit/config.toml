@@ -1,0 +1,16 @@
+# Pinning the theme keeps the dashboard's colours deterministic. An industrial
+# panel does not follow the operating system's dark mode, and the chart palette
+# was validated against a light surface.
+[theme]
+base = "light"
+primaryColor = "#2a78d6"
+backgroundColor = "#f9f9f7"
+secondaryBackgroundColor = "#ffffff"
+textColor = "#0b0b0b"
+
+[server]
+headless = true
+fileWatcherType = "none"
+
+[browser]
+gatherUsageStats = false
