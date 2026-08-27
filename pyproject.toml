@@ -15,9 +15,66 @@ include = ["spc_opcua*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-addopts = "-v --strict-markers"
+# --strict-markers turns a typo like @pytest.mark.integraton into an error
+# instead of a marker nobody notices is doing nothing.
+addopts = "-q --strict-markers --strict-config"
 asyncio_mode = "strict"
 asyncio_default_fixture_loop_scope = "function"
 markers = [
-    "integration: tests that start a real OPC UA server or client",
+    "integration: starts a real OPC UA server or client over a socket",
+    "slow: a statistical study that runs hundreds of simulated production runs",
 ]
+
+[tool.coverage.run]
+source = ["spc_opcua"]
+branch = true
+omit = [
+    # Streamlit's own runner executes this file; importing it under coverage
+    # would start a dashboard rather than measure one. Its logic lives in
+    # live_source.py and charts.py, both of which are covered.
+    "spc_opcua/dashboard/app.py",
+]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+]
+
+[tool.ruff]
+line-length = 90
+target-version = "py311"
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle errors
+    "F",    # pyflakes: unused imports, undefined names
+    "I",    # import sorting
+    "UP",   # outdated syntax for the target Python
+    "B",    # bugbear: likely mistakes rather than style
+    "D",    # docstrings, because this repo is meant to be read
+]
+ignore = [
+    "D203",  # incompatible with D211, which ruff also enables
+    "D213",  # incompatible with D212
+    "E501",  # long lines are caught by the formatter, not the linter
+    "D105",  # __str__ and friends: the method name already says what it does
+]
+
+[tool.ruff.lint.per-file-ignores]
+# Test names are the documentation, so a separate docstring on each of 580
+# tests would be noise. The module docstring is still required.
+# B905: the tests walk consecutive pairs with zip(x, x[1:]), where the second
+# sequence is deliberately one shorter. In spc_opcua/ every zip states its
+# length assumption explicitly instead.
+"tests/*" = ["D103", "B905"]
+# E402: this file must extend sys.path before it can import spc_opcua at all,
+# because `streamlit run` does not put the project root on the import path.
+"spc_opcua/dashboard/app.py" = ["E402"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"

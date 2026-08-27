@@ -48,8 +48,8 @@ Nothing in this module knows about OPC UA or the simulator. It takes subgroups.
 from __future__ import annotations
 
 import logging
+from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
-from typing import Iterable, Sequence
 
 from spc_opcua.spc.constants import (
     RECOMMENDED_BASELINE_SUBGROUPS,
@@ -303,7 +303,7 @@ class XbarRChart:
         self._points: list[ChartPoint] = []
 
     @classmethod
-    def fit(cls, baseline: Sequence[Subgroup]) -> "XbarRChart":
+    def fit(cls, baseline: Sequence[Subgroup]) -> XbarRChart:
         """Phase 1: compute limits from a baseline and freeze them.
 
         Args:

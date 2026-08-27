@@ -14,7 +14,7 @@ from spc_opcua.simulator.faults import (
     ToolWear,
     VarianceInflation,
 )
-from spc_opcua.simulator.machine import MachineSimulator
+from spc_opcua.simulator.offline import bore_subgroups
 from spc_opcua.spc.capability import (
     MINIMUM_ACCEPTABLE_CPK,
     Capability,
@@ -23,7 +23,7 @@ from spc_opcua.spc.capability import (
     rolling_capability,
 )
 from spc_opcua.spc.constants import constants_for
-from spc_opcua.spc.subgroups import Subgroup, subgroups_from_values
+from spc_opcua.spc.subgroups import Subgroup
 
 D2_FIVE = constants_for(5).d2
 
@@ -50,19 +50,6 @@ def constant_range_subgroups(
     d = sigma * D2_FIVE / 4.0
     values = (mean - 2 * d, mean - d, mean, mean + d, mean + 2 * d)
     return [Subgroup(i, "BoreDiameter", values) for i in range(count)]
-
-
-def bore_subgroups(faults: FaultSchedule, seed: int, count: int) -> list[Subgroup]:
-    """Run the simulator offline and split bore measurements into subgroups."""
-    config = load_config()
-    n = config.subgroup_size
-    simulator = MachineSimulator(config, seed=seed, faults=faults)
-    values: list[float] = []
-    while len(values) < count * n:
-        sample = simulator.step()
-        if sample.part_completed:
-            values.append(sample.values["BoreDiameter"])
-    return subgroups_from_values(values, n, tag="BoreDiameter")
 
 
 # --------------------------------------------------------------------------
@@ -392,7 +379,7 @@ def test_variance_inflation_ruins_both() -> None:
 # How much you can trust a capability number
 # --------------------------------------------------------------------------
 
-
+@pytest.mark.slow
 def test_the_estimator_is_unbiased_across_many_samples() -> None:
     """Averaged over forty independent 200-part samples, Cp lands on the truth."""
     theoretical_cp = 0.100 / (6 * 0.012)  # 1.389 from the configured sigma
@@ -402,7 +389,7 @@ def test_the_estimator_is_unbiased_across_many_samples() -> None:
     ]
     assert float(np.mean(estimates)) == pytest.approx(theoretical_cp, rel=0.05)
 
-
+@pytest.mark.slow 
 def test_a_single_capability_number_carries_real_uncertainty() -> None:
     """Two hundred parts gives a Cp with a standard deviation near 0.1.
 

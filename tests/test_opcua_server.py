@@ -18,7 +18,7 @@ from __future__ import annotations
 
 import socket
 import time
-from typing import AsyncIterator
+from collections.abc import AsyncIterator
 
 import pytest
 import pytest_asyncio

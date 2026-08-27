@@ -28,8 +28,8 @@ inactive fault does not shift a single value in the healthy data.
 from __future__ import annotations
 
 import logging
+from collections.abc import Sequence
 from dataclasses import dataclass
-from typing import Sequence
 
 import numpy as np
 
@@ -60,7 +60,7 @@ class ProcessEffect:
     std_multiplier: float = 1.0
     spike: float = 0.0
 
-    def combine(self, other: "ProcessEffect") -> "ProcessEffect":
+    def combine(self, other: ProcessEffect) -> ProcessEffect:
         """Stack two effects. Offsets and spikes add, multipliers multiply."""
         return ProcessEffect(
             mean_offset=self.mean_offset + other.mean_offset,
@@ -92,7 +92,7 @@ class SensorEffect:
     extra_noise_std: float = 0.0
     frozen: bool = False
 
-    def combine(self, other: "SensorEffect") -> "SensorEffect":
+    def combine(self, other: SensorEffect) -> SensorEffect:
         """Stack two effects. Offsets add, noise adds in quadrature, frozen wins."""
         combined_noise = float(
             np.hypot(self.extra_noise_std, other.extra_noise_std)

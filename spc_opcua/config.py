@@ -107,7 +107,7 @@ class TagSpec:
             )
 
     @classmethod
-    def from_dict(cls, raw: dict[str, Any]) -> "TagSpec":
+    def from_dict(cls, raw: dict[str, Any]) -> TagSpec:
         """Build a TagSpec from one YAML mapping, then validate it."""
         try:
             spec = cls(

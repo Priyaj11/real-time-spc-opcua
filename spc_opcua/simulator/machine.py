@@ -22,8 +22,8 @@ Milestone 4, and tests and evaluation runs go as fast as the processor allows.
 from __future__ import annotations
 
 import logging
+from collections.abc import Iterator
 from dataclasses import dataclass, field
-from typing import Iterator
 
 import numpy as np
 

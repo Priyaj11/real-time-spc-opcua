@@ -19,8 +19,8 @@ assessment out, which is what makes it testable without any of those.
 from __future__ import annotations
 
 import logging
+from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
-from typing import Iterable, Sequence
 
 from spc_opcua.config import MachineConfig, TagSpec, load_config
 from spc_opcua.spc.alarms import Alarm, AlarmLog

@@ -22,12 +22,13 @@ table, and stops.
 
 from __future__ import annotations
 
+import argparse
 import asyncio
 import logging
+from collections.abc import Iterable
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Iterable
 
 import pandas as pd
 
@@ -375,10 +376,8 @@ async def collect_from_client(
 # ---------------------------------------------------------------------------
 
 
-def build_parser() -> "argparse.ArgumentParser":
+def build_parser() -> argparse.ArgumentParser:
     """Command line options for the pipeline demonstration."""
-    import argparse
-
     parser = argparse.ArgumentParser(
         prog="python -m spc_opcua.pipeline",
         description=(

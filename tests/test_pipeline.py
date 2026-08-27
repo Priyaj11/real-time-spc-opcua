@@ -4,9 +4,9 @@ from __future__ import annotations
 
 import asyncio
 import socket
+from collections.abc import AsyncIterator
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import AsyncIterator
 
 import pytest
 import pytest_asyncio

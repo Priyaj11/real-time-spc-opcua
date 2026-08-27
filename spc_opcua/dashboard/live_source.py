@@ -29,8 +29,9 @@ import logging
 import socket
 import threading
 import time
+from collections.abc import Sequence
 from dataclasses import dataclass, field
-from typing import Any, Sequence
+from typing import Any
 
 from spc_opcua.config import MachineConfig, load_config
 from spc_opcua.opcua_client import ClientSettings, MachineClient

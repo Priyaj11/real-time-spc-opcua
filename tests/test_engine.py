@@ -12,22 +12,10 @@ from spc_opcua.simulator.faults import (
     ToolWear,
     VarianceInflation,
 )
-from spc_opcua.simulator.machine import MachineSimulator
+from spc_opcua.simulator.offline import bore_subgroups
 from spc_opcua.spc.engine import SPCEngine
 from spc_opcua.spc.nelson_rules import COMMON_RULES
-from spc_opcua.spc.subgroups import Subgroup, subgroups_from_values
-
-
-def bore_subgroups(faults: FaultSchedule, seed: int, count: int) -> list[Subgroup]:
-    config = load_config()
-    n = config.subgroup_size
-    simulator = MachineSimulator(config, seed=seed, faults=faults)
-    values: list[float] = []
-    while len(values) < count * n:
-        sample = simulator.step()
-        if sample.part_completed:
-            values.append(sample.values["BoreDiameter"])
-    return subgroups_from_values(values, n, tag="BoreDiameter")
+from spc_opcua.spc.subgroups import Subgroup
 
 
 def healthy(seed: int, count: int) -> list[Subgroup]:

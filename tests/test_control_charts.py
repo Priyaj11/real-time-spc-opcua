@@ -11,7 +11,7 @@ from spc_opcua.simulator.faults import (
     ToolWear,
     VarianceInflation,
 )
-from spc_opcua.simulator.machine import MachineSimulator
+from spc_opcua.simulator.offline import bore_subgroups
 from spc_opcua.spc.constants import constants_for
 from spc_opcua.spc.control_charts import (
     ChartPoint,
@@ -19,7 +19,7 @@ from spc_opcua.spc.control_charts import (
     XbarRChart,
     compute_limits,
 )
-from spc_opcua.spc.subgroups import Subgroup, subgroups_from_values
+from spc_opcua.spc.subgroups import Subgroup
 
 # Four subgroups of five, chosen so the arithmetic can be done by hand:
 # every range is exactly 8, and the means are 6, 5, 7, 6, averaging 6.
@@ -31,17 +31,7 @@ HAND_WORKED = [
 ]
 
 
-def bore_subgroups(faults: FaultSchedule, seed: int, count: int) -> list[Subgroup]:
-    """Run the simulator offline and split its bore measurements into subgroups."""
-    config = load_config()
-    n = config.subgroup_size
-    simulator = MachineSimulator(config, seed=seed, faults=faults)
-    values: list[float] = []
-    while len(values) < count * n:
-        sample = simulator.step()
-        if sample.part_completed:
-            values.append(sample.values["BoreDiameter"])
-    return subgroups_from_values(values, n, tag="BoreDiameter")
+
 
 
 # --------------------------------------------------------------------------
@@ -265,7 +255,7 @@ def test_the_limits_never_move_as_points_are_added() -> None:
 # What each chart actually detects
 # --------------------------------------------------------------------------
 
-
+@pytest.mark.slow
 def test_a_healthy_process_signals_only_rarely() -> None:
     """False alarms must be rare, but they are not as rare as 1 in 370.
 

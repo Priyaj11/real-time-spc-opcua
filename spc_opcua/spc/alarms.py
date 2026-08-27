@@ -26,8 +26,8 @@ Both need attention. Only one needs it this minute.
 from __future__ import annotations
 
 import logging
+from collections.abc import Iterable
 from dataclasses import dataclass, replace
-from typing import Iterable
 
 from spc_opcua.spc.nelson_rules import RULES, Violation
 

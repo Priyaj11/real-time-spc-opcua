@@ -19,6 +19,7 @@ from spc_opcua.spc.nelson_rules import (
     TRIGGERING_DATA,
     NelsonMonitor,
     Violation,
+    _bore_sigmas,
     apply_rules,
     rule_1,
     rule_2,
@@ -28,7 +29,6 @@ from spc_opcua.spc.nelson_rules import (
     rule_6,
     rule_7,
     rule_8,
-    _bore_sigmas,
 )
 
 # A deliberately unremarkable series: no long one-sided run, no monotone
@@ -444,7 +444,7 @@ def test_the_pattern_rules_catch_tool_wear_strictly_earlier_here() -> None:
 
     assert common.first_violation.end_index < rule_one.first_violation.end_index
 
-
+@pytest.mark.slow 
 def test_more_rules_also_mean_more_false_alarms() -> None:
     """The honest cost. Measured at roughly 0.5 percent against 5 percent."""
 

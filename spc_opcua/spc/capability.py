@@ -60,8 +60,8 @@ from __future__ import annotations
 
 import logging
 import math
+from collections.abc import Sequence
 from dataclasses import dataclass
-from typing import Sequence
 
 from spc_opcua.config import TagSpec
 from spc_opcua.spc.constants import sigma_from_mean_range

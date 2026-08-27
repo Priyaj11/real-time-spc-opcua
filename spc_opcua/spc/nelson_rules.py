@@ -39,8 +39,8 @@ from __future__ import annotations
 
 import logging
 from collections import deque
+from collections.abc import Callable, Iterable, Sequence
 from dataclasses import dataclass
-from typing import Callable, Iterable, Sequence
 
 logger = logging.getLogger(__name__)
 
@@ -121,6 +121,7 @@ def rule_2(z: Sequence[float], run: int = 9) -> list[Violation]:
     Triggering data: nine consecutive positive values, for example [0.5] * 9
     Note: a point sitting exactly on the centre line breaks the run, since it
     is on neither side.
+
     Args:
         run: How many in a row. Nine is Nelson's number.
     """
@@ -139,6 +140,7 @@ def rule_3(z: Sequence[float], run: int = 6) -> list[Violation]:
     nothing else: a trend is detectable long before it reaches a limit.
     Note: strictly monotonic. Two equal values break the run, which is the
     common formulation and avoids a flat line counting as a trend.
+
     Args:
         run: How many in a row. Six is Nelson's number.
     """

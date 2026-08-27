@@ -28,9 +28,9 @@ import argparse
 import asyncio
 import logging
 import time
+from collections.abc import AsyncIterator, Callable, Iterable, Sequence
 from dataclasses import dataclass
 from datetime import datetime
-from typing import AsyncIterator, Callable, Iterable, Sequence
 
 from asyncua import Client, ua
 from asyncua.common.node import Node
@@ -295,7 +295,7 @@ class MachineClient:
             self._dropped,
         )
 
-    async def __aenter__(self) -> "MachineClient":
+    async def __aenter__(self) -> MachineClient:
         await self.connect()
         return self
 
@@ -396,7 +396,7 @@ class MachineClient:
             else:
                 try:
                     update = await asyncio.wait_for(self._queue.get(), timeout_s)
-                except asyncio.TimeoutError:
+                except TimeoutError:
                     return
             yield update
             yielded += 1
@@ -415,7 +415,7 @@ class MachineClient:
                 collected.append(
                     await asyncio.wait_for(self._queue.get(), max(remaining, 0.001))
                 )
-            except asyncio.TimeoutError:
+            except TimeoutError:
                 break
         return collected
 

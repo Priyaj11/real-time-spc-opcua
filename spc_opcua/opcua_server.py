@@ -241,7 +241,7 @@ class MachineServer:
             self._samples_published,
         )
 
-    async def __aenter__(self) -> "MachineServer":
+    async def __aenter__(self) -> MachineServer:
         await self.start()
         return self
 

@@ -11,7 +11,6 @@ import pytest
 
 from spc_opcua.dashboard.live_source import LiveSource, Snapshot
 
-
 # --------------------------------------------------------------------------
 # The snapshot itself, with nothing running
 # --------------------------------------------------------------------------
