@@ -338,16 +338,7 @@ resolves type hints.
   nowhere near production practice.
 - **Thirty replicates per scenario** is enough to separate 92% from 100%; it is
   not enough to argue about a percentage point.
-
-## What I would do next
-
-- Chart several characteristics at once, with a per-tag status roll-up
-- CUSUM or EWMA alongside Shewhart charts — both detect small sustained shifts
-  faster than the Nelson Rules do
-- A proper alarm shelving workflow, not just acknowledge
-- Persist history to a database so limits survive a restart
-- Certificate-based OPC UA authentication
-
+  
 ---
 
 MIT licensed.
