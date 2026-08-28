@@ -7,7 +7,7 @@
 PYTHON := python
 
 .DEFAULT_GOAL := help
-.PHONY: help fast test slow cov lint fix dash data clean
+.PHONY: help fast test slow cov lint fix evaluate compare dash data clean
 
 help:  ## Show this list
 	@grep -E '^[a-z-]+:.*?##' $(MAKEFILE_LIST) \
@@ -46,3 +46,9 @@ data:  ## Collect a fresh sample_data.csv and subgroups.csv over OPC UA
 clean:  ## Remove caches and coverage artefacts
 	rm -rf .pytest_cache .ruff_cache .coverage htmlcov
 	find . -type d -name __pycache__ -prune -exec rm -rf {} +
+
+evaluate:  ## Run the 12 fault scenarios and write the results to data/
+	$(PYTHON) -m spc_opcua.evaluation
+
+compare:  ## Measure detection against false alarms, per rule set
+	$(PYTHON) -m spc_opcua.evaluation --compare	

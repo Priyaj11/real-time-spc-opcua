@@ -123,6 +123,7 @@ def rule_2(z: Sequence[float], run: int = 9) -> list[Violation]:
     is on neither side.
 
     Args:
+        z: Sigma distances of the plotted points, in order.
         run: How many in a row. Nine is Nelson's number.
     """
     return _same_sign_run(z, run, rule=2, name="9 on one side")
@@ -142,6 +143,7 @@ def rule_3(z: Sequence[float], run: int = 6) -> list[Violation]:
     common formulation and avoids a flat line counting as a trend.
 
     Args:
+        z: Sigma distances of the plotted points, in order.
         run: How many in a row. Six is Nelson's number.
     """
     violations: list[Violation] = []
@@ -149,7 +151,7 @@ def rule_3(z: Sequence[float], run: int = 6) -> list[Violation]:
         return violations
     for end in range(run - 1, len(z)):
         window = z[end - run + 1 : end + 1]
-        steps = [later - earlier for earlier, later in zip(window, window[1:])]
+        steps = [later - earlier for earlier, later in zip(window, window[1:], strict=False)]
         if all(step > 0 for step in steps):
             direction = "rising"
         elif all(step < 0 for step in steps):
@@ -178,6 +180,7 @@ def rule_4(z: Sequence[float], run: int = 14) -> list[Violation]:
     meaning operator makes a process worse. Deming called it tampering.
     Triggering data: [0, 1, 0, 1, ...] for fourteen points
     Args:
+        z: Sigma distances of the plotted points, in order.
         run: How many in a row. Fourteen is Nelson's number.
     """
     violations: list[Violation] = []
@@ -185,10 +188,10 @@ def rule_4(z: Sequence[float], run: int = 14) -> list[Violation]:
         return violations
     for end in range(run - 1, len(z)):
         window = z[end - run + 1 : end + 1]
-        steps = [later - earlier for earlier, later in zip(window, window[1:])]
+        steps = [later - earlier for earlier, later in zip(window, window[1:], strict=False)]
         if any(step == 0 for step in steps):
             continue
-        if all((a > 0) != (b > 0) for a, b in zip(steps, steps[1:])):
+        if all((a > 0) != (b > 0) for a, b in zip(steps, steps[1:], strict=False)):
             violations.append(
                 Violation(
                     rule=4,

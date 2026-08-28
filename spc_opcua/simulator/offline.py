@@ -34,6 +34,46 @@ CACHE_SIZE = 128
 
 
 @lru_cache(maxsize=CACHE_SIZE)
+def part_readings_and_truth(
+    faults: tuple[Fault, ...] = (),
+    seed: int = 1,
+    parts: int = 200,
+    tag: str = DEFAULT_TAG,
+    fault_seed: int = 1,
+) -> tuple[tuple[float, ...], tuple[float, ...]]:
+    """Collect both what the gauge reported and what the part actually was.
+
+    The two differ only under a sensor fault. That distinction is the whole
+    point of the evaluation in Milestone 12: a drifting gauge should raise an
+    alarm, because something really is wrong, but it must not be counted as
+    scrap, because every part it measured was fine.
+
+    Args:
+        faults: Faults to inject. Empty means a healthy machine.
+        seed: Seed for the machine's own noise.
+        parts: How many completed parts to collect.
+        tag: Which measurement to keep.
+        fault_seed: Seed for the fault schedule's separate generator.
+
+    Returns:
+        Two tuples of equal length: the readings, and the true dimensions.
+
+    Example:
+        >>> readings, truth = part_readings_and_truth(parts=4)
+        >>> readings == truth        # healthy machine: the gauge is honest
+        True
+    """
+    config = load_config()
+    schedule = FaultSchedule(faults, seed=fault_seed)
+    simulator = MachineSimulator(config, seed=seed, faults=schedule)
+    readings: list[float] = []
+    truth: list[float] = []
+    while len(readings) < parts:
+        sample = simulator.step()
+        if sample.part_completed:
+            readings.append(sample.values[tag])
+            truth.append(sample.truth[tag])
+    return tuple(readings), tuple(truth)
 def part_values(
     faults: tuple[Fault, ...] = (),
     seed: int = 1,

@@ -7,10 +7,10 @@
 PYTHON := python
 
 .DEFAULT_GOAL := help
-.PHONY: help fast test slow cov lint fix dash data clean
+.PHONY: help fast test slow cov lint fix evaluate compare dash data clean
 
 help:  ## Show this list
-	@grep -E '^[a-z]+:.*##' $(MAKEFILE_LIST) | awk -F'## ' '{split($$1,a,":"); printf "  make %-6s %s\n", a[1], $$2}'
+	@grep -E '^[a-z]+:.*##' $(MAKEFILE_LIST) | awk -F'## ' '{split($$1,a,":"); printf "  make %-9s %s\n", a[1], $$2}'
 
 fast:  ## The loop you run while coding: no sockets, no long studies
 	$(PYTHON) -m pytest -m "not integration and not slow"
@@ -35,6 +35,12 @@ lint:  ## Static checks: unused names, import order, docstrings, likely bugs
 
 fix:  ## Apply the lint fixes that are safe to apply automatically
 	$(PYTHON) -m ruff check . --fix
+
+evaluate:  ## Run the 12 fault scenarios and write the results to data/
+	$(PYTHON) -m spc_opcua.evaluation
+
+compare:  ## Measure detection against false alarms, per rule set
+	$(PYTHON) -m spc_opcua.evaluation --compare
 
 dash:  ## Launch the operator dashboard
 	$(PYTHON) -m streamlit run spc_opcua/dashboard/app.py

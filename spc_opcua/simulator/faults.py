@@ -191,6 +191,7 @@ class ToolWear(Fault):
     def process_effect(
         self, t_s: float, rng: np.random.Generator, spec: TagSpec
     ) -> ProcessEffect:
+        """Change the part itself. Nothing while the fault is inactive."""
         if not self.is_active(t_s):
             return ProcessEffect()
         return ProcessEffect(mean_offset=self.rate_per_hour * self.elapsed_hours(t_s))
@@ -213,6 +214,7 @@ class MeanShift(Fault):
     def process_effect(
         self, t_s: float, rng: np.random.Generator, spec: TagSpec
     ) -> ProcessEffect:
+        """Change the part itself. Nothing while the fault is inactive."""
         if not self.is_active(t_s):
             return ProcessEffect()
         return ProcessEffect(mean_offset=self.shift_sigma * spec.std_dev)
@@ -243,6 +245,7 @@ class Outlier(Fault):
     def process_effect(
         self, t_s: float, rng: np.random.Generator, spec: TagSpec
     ) -> ProcessEffect:
+        """Change the part itself. Nothing while the fault is inactive."""
         if not self.is_active(t_s):
             return ProcessEffect()
         if rng.random() >= self.probability:
@@ -274,6 +277,7 @@ class VarianceInflation(Fault):
     def process_effect(
         self, t_s: float, rng: np.random.Generator, spec: TagSpec
     ) -> ProcessEffect:
+        """Change the part itself. Nothing while the fault is inactive."""
         if not self.is_active(t_s):
             return ProcessEffect()
         return ProcessEffect(std_multiplier=self.factor)
@@ -301,6 +305,7 @@ class SensorDrift(Fault):
     def sensor_effect(
         self, t_s: float, rng: np.random.Generator, spec: TagSpec
     ) -> SensorEffect:
+        """Change only the reading. Nothing while the fault is inactive."""
         if not self.is_active(t_s):
             return SensorEffect()
         return SensorEffect(offset=self.rate_per_hour * self.elapsed_hours(t_s))
@@ -317,6 +322,7 @@ class SensorStuck(Fault):
     def sensor_effect(
         self, t_s: float, rng: np.random.Generator, spec: TagSpec
     ) -> SensorEffect:
+        """Change only the reading. Nothing while the fault is inactive."""
         if not self.is_active(t_s):
             return SensorEffect()
         return SensorEffect(frozen=True)
@@ -338,6 +344,7 @@ class SensorNoise(Fault):
     def sensor_effect(
         self, t_s: float, rng: np.random.Generator, spec: TagSpec
     ) -> SensorEffect:
+        """Change only the reading. Nothing while the fault is inactive."""
         if not self.is_active(t_s):
             return SensorEffect()
         return SensorEffect(extra_noise_std=self.extra_sigma * spec.std_dev)

@@ -117,8 +117,8 @@ def _series(
             "<extra></extra>",
         )
     )
-    bad_x = [xi for xi, flag in zip(x, flags) if flag]
-    bad_y = [yi for yi, flag in zip(y, flags) if flag]
+    bad_x = [xi for xi, flag in zip(x, flags, strict=True) if flag]
+    bad_y = [yi for yi, flag in zip(y, flags, strict=True) if flag]
     if bad_x:
         figure.add_trace(
             go.Scatter(

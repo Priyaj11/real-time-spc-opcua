@@ -246,7 +246,7 @@ def value_tiles(snapshot: Snapshot) -> None:
     config = load_config()
     columns = st.columns(len(TILE_TAGS) + 3)
 
-    for column, name in zip(columns, TILE_TAGS):
+    for column, name in zip(columns, TILE_TAGS, strict=False):
         spec = config.tag(name)
         raw = snapshot.latest.get(name)
         shown = "--" if raw is None else f"{float(raw):.{spec.decimals}f}"
