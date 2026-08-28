@@ -323,7 +323,7 @@ resolves type hints.
 
 ---
 
-## Honest limitations
+## limitations
 
 - **The machine is simulated.** The physics is plausible — thermal response,
   correlated noise, tool wear pushing torque up — but it is not a real spindle.
